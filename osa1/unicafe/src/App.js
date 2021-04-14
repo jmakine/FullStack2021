@@ -22,6 +22,24 @@ const Button = (props) => {
   )
 }
 
+const Statistics = (props) => {  
+  if (props.all > 0) {
+    return (
+      <div>  
+        <Display good={props.good} text='Good '/>
+        <Display neutral={props.neutral} text='Neutral '/>
+        <Display bad={props.bad} text='Bad '/>
+        <Display all={props.all} text='All '/>
+        <Display average={props.average} text='Average '/>
+        <Display positive={props.positive} text='Positive '/>      
+      </div>
+    )
+  } 
+  return (
+  <p>No feedback given</p>
+  )
+}
+
 const App = () => {
   // tallenna napit omaan tilaansa
   const [good, setGood] = useState(0)
@@ -72,14 +90,17 @@ const App = () => {
       />
 
       <h1>Statistics</h1>
-      <Display good={good} text='Good '/>
-      <Display neutral={neutral} text='Neutral '/>
-      <Display bad={bad} text='Bad '/>
-      <Display all={all} text='All '/>
-      <Display average={average(sum, all)} text='Average '/>
-      <Display positive={positive(good, all)} text='Positive '/>      
-    </div>
+      <Statistics
+        good={good} 
+        neutral={neutral}
+        bad={bad} 
+        all={all} 
+        sum={sum}
+        average={average(sum, all)} 
+        positive={positive(good, all)}
+      />
+      </div>
   )
 }      
 
-export default App;
+export default App; 
