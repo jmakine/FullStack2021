@@ -1,16 +1,18 @@
 import React, { useState } from 'react'
 
-const Display = (props) => {
+const StatisticLine = (props) => {
   return (
-    <div>
-      {props.text} 
-      {props.good} 
-      {props.neutral}
-      {props.bad}
-      {props.all}
-      {props.average}
-      {props.positive}
-      </div>
+    <tr>
+      <td> {props.text} </td>
+      <td> 
+        {props.good} 
+        {props.neutral} 
+        {props.bad} 
+        {props.all} 
+        {props.average} 
+        {props.positive} 
+      </td>
+    </tr>
   )
 }
 
@@ -25,23 +27,25 @@ const Button = (props) => {
 const Statistics = (props) => {  
   if (props.all > 0) {
     return (
-      <div>  
-        <Display good={props.good} text='Good '/>
-        <Display neutral={props.neutral} text='Neutral '/>
-        <Display bad={props.bad} text='Bad '/>
-        <Display all={props.all} text='All '/>
-        <Display average={props.average} text='Average '/>
-        <Display positive={props.positive} text='Positive '/>      
-      </div>
+      <tbody>       
+        <StatisticLine good={props.good} text='Good '/>
+        <StatisticLine neutral={props.neutral} text='Neutral '/>
+        <StatisticLine bad={props.bad} text='Bad '/>
+        <StatisticLine all={props.all} text='All '/>
+        <StatisticLine average={props.average} text='Average '/>
+        <StatisticLine positive={props.positive} text='Positive '/>            
+      </tbody>
     )
   } 
   return (
-  <p>No feedback given</p>
+  <tbody>
+    <tr><td>No feedback given</td></tr>
+  </tbody>
   )
 }
 
 const App = () => {
-  // tallenna napit omaan tilaansa
+
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
@@ -75,6 +79,7 @@ const App = () => {
 
   return (
     <div>
+
       <h1>Give Feedback</h1>      
       <Button 
         handleClick={increaseGood}
@@ -89,7 +94,8 @@ const App = () => {
         text='bad'
       />
 
-      <h1>Statistics</h1>
+      <h1>Statistics</h1>      
+      <table>
       <Statistics
         good={good} 
         neutral={neutral}
@@ -97,8 +103,9 @@ const App = () => {
         all={all} 
         sum={sum}
         average={average(sum, all)} 
-        positive={positive(good, all)}
-      />
+        positive={positive(good, all)}/>
+      </table>
+
       </div>
   )
 }      
