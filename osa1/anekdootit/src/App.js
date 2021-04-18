@@ -19,22 +19,35 @@ const App = () => {
   ]
 
   const [selected, setSelected] = useState(0)
-  const [votes, addVote] = useState({0:0, 1:0, 2:0, 3:0, 4:0, 5:0})
-
+  const [votes, addVote] = useState(new Array(7).join('0').split('').map(parseFloat))
+  
   const randomize = () => {
     const randomNumber = Math.floor(Math.random() * 6);
     setSelected(randomNumber)
   }
 
-  const votesCopy = {...votes}
+  //for some reason, this returns 0 (?)
+  const indexOfMax = () => {    
+    let max = 0;
+    let maxIndex = 0;    
+    for (let i = 1; i < votes.length; i++) {
+        if (votes[i] > max) {
+            max = votes[i];
+            maxIndex = i;
+        }        
+    }    
+    return maxIndex;
+  }
   
   const vote = () => {  
+    const votesCopy = {...votes}
     votesCopy[selected] += 1
-    addVote(votesCopy)
-  }
+    addVote(votesCopy)  
+    }
 
   return (
     <div>
+      <h1>Anecdote of the day</h1>
     <p>{anecdotes[selected]}</p>
     <p>Has {votes[selected]} votes</p>
     <Button 
@@ -45,6 +58,9 @@ const App = () => {
         handleClick={randomize}
         text='Next anecdote'
     />
+    <h1>Anecdote with most votes</h1>
+    <p>{anecdotes[indexOfMax()]}</p> 
+    <p>Has {votes[indexOfMax()]} votes</p>
     </div>
   )
 }
