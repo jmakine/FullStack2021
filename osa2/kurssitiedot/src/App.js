@@ -1,5 +1,5 @@
 import React from 'react'
-import Course from './Course'
+import Course from './components/Course'
 
 const App = () => {
   const course = {
@@ -20,6 +20,11 @@ const App = () => {
         name: 'State of a component',
         exercises: 14,
         id: 3
+      },
+      {
+        name: 'Test addition',
+        exercises: 14,
+        id: 4
       }
     ]
   }
