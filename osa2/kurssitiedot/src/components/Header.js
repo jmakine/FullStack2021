@@ -6,7 +6,7 @@ const Header = (props) => {
 
   return (
     <div>
-      <p> {header} </p>
+      <h2> {header} </h2>
     </div>
   )
 }
