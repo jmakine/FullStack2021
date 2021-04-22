@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
-import Person from './components/Person'
+import Filter from './components/Filter'
+import Add from './components/Add'
+import Persons from './components/Persons'
 
 const App = () => {
   
@@ -40,55 +42,33 @@ const App = () => {
 
   const handleSearchChange = (event) => {
     event.preventDefault()
-    setSearch(event.target.value)
-    console.log('event.target.value ', event.target.value)
-    
-    const filtered = persons
-        .filter(person => 
-          person.name.includes(event.target.value) 
-          || (event.target.value)==='')
-          console.log('filtered after searchChange ' ,filtered)
-    return filtered
+    setSearch(event.target.value)    
   }
 
   return (
     <div>
       <h1>Phonebook</h1>
 
-      <div>
-        <input           
-          onChange={handleSearchChange} 
-          value={searchValue}
-          placeholder="Search by name" />
-      </div>
+      <Filter 
+        onChange={handleSearchChange} 
+        value={searchValue} />
 
-      <form onSubmit={addNewName}>
-        <div>
-          name: <input 
-                  value={newName}
-                  onChange={handleNameChange}/>
-        </div>     
-        <div>
-          number: <input
-                    value={newNumber}
-                    onChange={handleNumberChange}/>
-          </div>   
-          <button type="submit">add</button>
-      </form>        
-      
+      <h2>Add a new</h2>
+      <Add 
+        onSubmit={addNewName}
+        valueName={newName}
+        onChangeName={handleNameChange}
+        valueNumber={newNumber}
+        onChangeNumber={handleNumberChange}
+        />
+
       <h2>Numbers</h2>
-      <ul>
-        {persons
-        .filter(person => 
-          (person.name).toUpperCase().includes(searchValue.toUpperCase()) 
-          || person.name==='') 
-        .map(person => 
-          <Person key={person.name} person={person}/>)
-        }
-      </ul>
+      <Persons 
+        persons={persons} 
+        search={searchValue}
+      />   
     </div>
   )
-
 }
 
 export default App;
