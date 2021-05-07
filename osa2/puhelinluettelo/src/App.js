@@ -3,6 +3,7 @@ import Filter from './components/Filter'
 import Add from './components/Add'
 import Persons from './components/Persons'
 import personsService from './services/personsService'
+import Notification from './components/Notification'
 
 const App = () => {
   
@@ -10,7 +11,9 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ searchValue, setSearch ] = useState('')
-  
+  const [ notification, setNotification ] = useState('')
+  const [ style, setStyle ] = useState('')
+
   useEffect(() => {
     personsService
       .getAll()
@@ -31,14 +34,25 @@ const App = () => {
         .create(personObject)
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
+          setNotification(`Added ${newName}`)
+          setStyle('success')
+          setTimeout(() => {
+            setNotification(null)
+          }, 5000)
         })
-      
     } else {
-      alert(`${newName} is already added to phonebook`)}
-    
+      //alert(`${newName} is already added to phonebook`)}
+      setNotification(`${newName} is already added to phonebook`);
+      setStyle('error')
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
+    }
+
     setNewName('')
     setNewNumber('')
   }
+
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
@@ -56,6 +70,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification message={notification} style={style}/>
 
       <Filter 
         onChange={handleSearchChange} 

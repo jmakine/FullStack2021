@@ -21,9 +21,9 @@ const deleteObj = async id => {
                       .then(data => window.confirm(`Delete ${data.name} ?`))                     
                       
     if (personToDelete === true) {
-      const request = axios.delete(`${baseUrl}/${id}`)
+      axios.delete(`${baseUrl}/${id}`)
       window.location.reload()
-    return request.then(response => response.data)}
+    }
 }
 
 export default { getAll, create, deleteObj }
