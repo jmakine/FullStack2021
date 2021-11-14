@@ -29,7 +29,23 @@ const App = () => {
       number: newNumber
     }
 
-    if(persons.filter(e => e.name===newName).length === 0){
+    if(persons.filter(e => e.name===newName).length > 0){
+      setNotification(`Name ${newName} is already added to phonebook`);
+      setStyle('error')
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
+      setNewName('')
+      setNewNumber('')}
+    else if(persons.filter(e => e.number===newNumber).length > 0){
+      setNotification(`Number ${newNumber} is already added to phonebook`);
+      setStyle('error')
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
+      setNewName('')
+      setNewNumber('')}  
+    else {  
       personsService
         .create(personObject)
         .then(returnedPerson => {
@@ -40,19 +56,8 @@ const App = () => {
             setNotification(null)
           }, 5000)
         })
-    } else {
-      //alert(`${newName} is already added to phonebook`)}
-      setNotification(`${newName} is already added to phonebook`);
-      setStyle('error')
-      setTimeout(() => {
-        setNotification(null)
-      }, 5000)
     }
-
-    setNewName('')
-    setNewNumber('')
   }
-
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)

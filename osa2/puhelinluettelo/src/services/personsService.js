@@ -2,7 +2,10 @@
 // henkilöjen käsittelyä hoitavia funktioita
 
 import axios from 'axios'
-const baseUrl = 'http://localhost:3001/persons'
+
+//const baseUrl = 'http://localhost:3001/persons'
+// muutettu vastaamaan osan3 backendin urlia, jossa muistiinpanot/puhelinluettelo on
+const baseUrl = '/api/persons'
 
 const getAll = () => {
     const request = axios.get(baseUrl)
