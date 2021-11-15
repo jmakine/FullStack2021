@@ -45,6 +45,14 @@ const App = () => {
       }, 5000)
       setNewName('')
       setNewNumber('')}  
+    else if (newNumber === "" || newNumber === "") {
+      setNotification(`Missing info`);
+      setStyle('error')
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
+      setNewName('')
+      setNewNumber('')} 
     else {  
       personsService
         .create(personObject)
