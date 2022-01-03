@@ -11,6 +11,13 @@ export const votedNotification = (message) => {
         data: message
     }
 }
+
+export const hideNotification = (message) => {
+    return {
+        type: 'HIDE',
+        data: message
+    }
+}
     
 const reducer = (state = '', action) => {
     switch(action.type) {
@@ -18,6 +25,8 @@ const reducer = (state = '', action) => {
         return 'Added: ' + action.data
       case 'VOTED':
         return 'Voted: ' + action.data
+      case 'HIDE':
+          return ''
       default:
         return state
     }
