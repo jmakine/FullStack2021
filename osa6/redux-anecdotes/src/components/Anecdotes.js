@@ -20,10 +20,13 @@ const Anecdote = ({ anecdote, handleClick }) => {
 const Anecdotes = () => {
   const dispatch = useDispatch()
   const anecdotes = useSelector(state => state.anecdotes)
+  const filterState = useSelector(state => state.filter)
   
   return(
     <ul>
       {anecdotes
+      .filter((x) =>
+        x.content.toLowerCase().includes(filterState.toLowerCase()))
       .sort((x, y) => y.votes - x.votes)
       .map(anecdote =>
         <Anecdote
