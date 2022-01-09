@@ -21,6 +21,7 @@ const Anecdotes = () => {
   const dispatch = useDispatch()
   const anecdotes = useSelector(state => state.anecdotes)
   const filterState = useSelector(state => state.filter)
+  console.log(anecdotes)
   
   return(
     <ul>

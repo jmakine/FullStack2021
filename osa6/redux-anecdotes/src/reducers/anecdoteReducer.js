@@ -1,3 +1,5 @@
+//import { getAll } from '../services/anecdotes'
+
 const anecdotesAtStart = [
   'If it hurts, do it more often',
   'Adding manpower to a late software project makes it later!',
@@ -35,9 +37,16 @@ export const vote = (id) => {
   }
 }
 
+export const initializeAnecdotes = (anecdotes) => {
+  return {
+      type: 'INIT_ANECDOTES',
+      data: anecdotes,
+    }
+}
+
 const initialState = anecdotesAtStart.map(asObject)
 
-const reducer = (state = initialState, action) => {
+const reducer = (state = [], action) => {
   switch(action.type) {
     case 'NEW ANECDOTE':
       return [...state, action.data]
@@ -49,7 +58,9 @@ const reducer = (state = initialState, action) => {
         votes: anecdoteToVote.votes + 1
       }
       return state.map(anecdote =>
-        anecdote.id !== id ? anecdote : votedAnecdote)       
+        anecdote.id !== id ? anecdote : votedAnecdote)    
+    case 'INIT_ANECDOTES':
+      return action.data   
     default:
       return state
   }
