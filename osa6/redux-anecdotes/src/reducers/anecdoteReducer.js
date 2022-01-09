@@ -1,4 +1,4 @@
-//import { getAll } from '../services/anecdotes'
+import anecdoteService from '../services/anecdotes'
 
 const anecdotesAtStart = [
   'If it hurts, do it more often',
@@ -20,13 +20,12 @@ const asObject = (anecdote) => {
 }
 
 export const createAnecdote = (content) => {
-  return {
-    type: 'NEW ANECDOTE',
-    data: {
-      content,
-      votes: 0,
-      id: getId()
-    }
+  return async dispatch => {
+    const newAnecdote = await anecdoteService.createNew(content)
+    dispatch({
+      type: 'NEW ANECDOTE',
+      data: newAnecdote
+    })
   }
 }
 
@@ -37,11 +36,14 @@ export const vote = (id) => {
   }
 }
 
-export const initializeAnecdotes = (anecdotes) => {
-  return {
+export const initializeAnecdotes = () => {
+  return async dispatch => {
+    const anecdotes = await anecdoteService.getAll()
+    dispatch({  
       type: 'INIT_ANECDOTES',
       data: anecdotes,
-    }
+    })
+  }
 }
 
 const initialState = anecdotesAtStart.map(asObject)
