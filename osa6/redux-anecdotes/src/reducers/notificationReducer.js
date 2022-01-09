@@ -1,32 +1,31 @@
-export const addedNotification = (message) => {    
-    return {
-          type: 'ADDED',
-          data: message
+let timeoutId = -1
+export const setNotification = (message, time) => {
+    clearTimeout(timeoutId)
+    return async dispatch => {
+        const show = () => {
+            dispatch({
+                type: 'MESSAGE',
+                data: message
+            })
         }
-}
-
-export const votedNotification = (message) => {
-    return {
-        type: 'VOTED',
-        data: message
+        const hide = () => {
+            dispatch({
+                type: 'HIDE',
+                data: ''
+            })
+        }
+        show()
+        const newTideoutId = setTimeout(hide, time*1000)
+        timeoutId = newTideoutId    
     }
 }
 
-export const hideNotification = (message) => {
-    return {
-        type: 'HIDE',
-        data: message
-    }
-}
-    
 const reducer = (state = '', action) => {
     switch(action.type) {
-      case 'ADDED':
-        return 'Added: ' + action.data
-      case 'VOTED':
-        return 'Voted: ' + action.data
+      case 'MESSAGE':
+        return action.data
       case 'HIDE':
-          return ''
+        return action.data
       default:
         return state
     }
