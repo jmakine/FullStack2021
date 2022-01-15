@@ -32,11 +32,7 @@ export const createAnecdote = (content) => {
 export const vote = (id) => {
   return async dispatch => {
     const toVote = await anecdoteService.getById(id)
-    console.log(toVote)
-    const voted = await anecdoteService.addVote(toVote)
-    console.log(voted)
-    const votedId = voted.id
-    console.log(votedId)
+    await anecdoteService.addVote(toVote)
     dispatch({
       type: 'VOTE',
       data: { id }

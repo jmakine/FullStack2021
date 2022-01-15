@@ -1,7 +1,7 @@
 let timeoutId = -1
 export const setNotification = (message, time) => {
-    clearTimeout(timeoutId)
     return async dispatch => {
+        clearTimeout(timeoutId)
         const show = () => {
             dispatch({
                 type: 'MESSAGE',
