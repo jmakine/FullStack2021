@@ -112,11 +112,16 @@ const typeDefs = gql`
     type Mutation {
 
         addBook(
-            title: String!
-            author: String!
-            published: Int!
-            genres: [String]
+          title: String!
+          author: String!
+          published: Int!
+          genres: [String]
         ): Book
+
+        addAuthor(
+          name: String!
+          born: Int
+        ): Author
 
         editAuthor(
             name: String!
@@ -153,28 +158,36 @@ const resolvers = {
   },
 
   Mutation: {
-      addBook: (root, args) => {
-          const book = { ...args, id: uuid() }
-          !authors.some(author => author.name === args.author)
-          && (authors = authors.concat({
-              name: args.author,
-              born: null,
-              bookCount: 1,
-            })
-          )
-            books = books.concat(book)
-            return book
-      },
+    addAuthor: (root, args) => {
+      const author = { ...args, id: uuid() }
+      if(!authors.some(author => author.name === args.name)) {
+        return author
+      } else return null
+    }
+    ,
 
-      editAuthor: (root, args) => {
-        const author = authors.find(a => a.name === args.name)
-        if(!author) {
-            return null
-        } 
-        const updatedAuthor = { ...author, born: args.setBornTo}
-        authors = authors.map(a => a.name === args.name ? updatedAuthor : a)
-        return updatedAuthor
-      }
+    addBook: (root, args) => {
+      const book = { ...args, id: uuid() }
+      !authors.some(author => author.name === args.author)
+      && (authors = authors.concat({
+            name: args.author,
+            bookCount: 1,
+            id: uuid()
+          })
+        )
+      books = books.concat(book)
+      return book
+    },
+
+    editAuthor: (root, args) => {
+      const author = authors.find(a => a.name === args.name)
+      if(!author) {
+          return null
+      } 
+      const updatedAuthor = { ...author, born: args.setBornTo}
+      authors = authors.map(a => a.name === args.name ? updatedAuthor : a)
+      return updatedAuthor
+    }
   }
 }
 
