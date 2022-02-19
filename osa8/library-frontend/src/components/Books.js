@@ -4,17 +4,17 @@ import { ALL_BOOKS } from '../queries'
 
 const Books = ({show}) => {
 
-  const result = useQuery(ALL_BOOKS)
+  const books = useQuery(ALL_BOOKS)
 
-  if(result.loading) {
+  if(books.loading) {
     return <div>Loading ...</div>
   }
 
-  if (!show) {
+  if (!show || !books.data) {
     return null
   }
 
-  const books = result.data.allBooks
+  const allbooks = books.data.allBooks
 
   return (
     <div>
@@ -31,10 +31,10 @@ const Books = ({show}) => {
               published
             </th>
           </tr>
-          {books.map(a =>
+          {allbooks.map(a =>
             <tr key={a.id}>
               <td>{a.title}</td>
-              <td>{a.author}</td>
+              <td>{a.author.name}</td>
               <td>{a.published}</td>
             </tr>
           )}

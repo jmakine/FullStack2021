@@ -50,3 +50,21 @@ export const SET_BIRTHYEAR = gql`
         }
     }
 ` 
+
+export const LOGIN = gql`
+    mutation login($username: String!, $password: String!) {
+        login(username: $username, password: $password) {
+            value
+        }
+    }
+`
+
+export const ME = gql`
+    query {
+        me {
+            id
+            username
+            favoriteGenre
+        }
+    }
+`

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { useQuery } from '@apollo/client'
 import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
-import { ALL_AUTHORS } from './queries'
+import LoginForm from './components/LoginForm'
 
 const App = () => {
   
@@ -12,6 +11,7 @@ const App = () => {
   return (
     <div>
       <div>
+        <button onClick={() => setPage('login')}>login</button>
         <button onClick={() => setPage('authors')}>authors</button>
         <button onClick={() => setPage('books')}>books</button>
         <button onClick={() => setPage('add')}>add book</button>
@@ -27,6 +27,10 @@ const App = () => {
 
       <NewBook
         show={page === 'add'}
+      />
+
+      <LoginForm
+        show={page === 'login'}
       />
 
     </div>

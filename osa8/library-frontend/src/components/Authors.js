@@ -50,8 +50,7 @@ const Authors = ({show}) => {
     setYear('')
   }
 
-  const options = allAuthors.data.allAuthors
-                    .map(a => a && {value: a.name, label: a.name})
+  const options = authors.map(a => a && {value: a.name, label: a.name})
 
   if (allAuthors.loading) {
     return <div>Loading ... </div>
