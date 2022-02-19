@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 const Books = ({show, books}) => {
 
+  const [selectedGenre, setGenre] = useState('all')
   if (!show || !books.data) {
     return null
   }
@@ -10,10 +11,23 @@ const Books = ({show, books}) => {
     return <div>Loading ...</div>
   }
 
+  const allBooks = books.data.allBooks.filter( book => {
+    if(selectedGenre !== 'all') {
+      return book.genres.includes(selectedGenre)
+    } 
+    return book
+  })
+
+  const allGenres = books.data.allBooks.map(book => book.genres).flat(1)
+  const uniqueGenres = [...new Set(allGenres)]
+
+  console.log(allGenres)
+  console.log(uniqueGenres)
+
   return (
     <div>
       <h2>books</h2>
-
+      <p>in genre <strong>{selectedGenre}</strong> </p>
       <table>
         <tbody>
           <tr>
@@ -25,7 +39,7 @@ const Books = ({show, books}) => {
               published
             </th>
           </tr>
-          {books.data.allBooks.map(a =>
+          {allBooks.map(a =>
             <tr key={a.id}>
               <td>{a.title}</td>
               <td>{a.author.name}</td>
@@ -34,6 +48,12 @@ const Books = ({show, books}) => {
           )}
         </tbody>
       </table>
+      <div>
+        {uniqueGenres.map((genre, index) => {
+          return <button key={genre + index} onClick={() => setGenre(genre)}>{genre}</button>
+        })}
+        <button onClick={() => setGenre('all')}>all</button>
+      </div>
     </div>
   )
 }
