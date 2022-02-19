@@ -3,8 +3,8 @@ import { useMutation, useQuery } from '@apollo/client'
 import { ALL_AUTHORS, SET_BIRTHYEAR } from '../queries'
 import Select from 'react-select'
 
-const Authors = ({show}) => {
-  const allAuthors = useQuery(ALL_AUTHORS)
+const Authors = ({show, token}) => {
+  const authors = useQuery(ALL_AUTHORS)
   
   const [name, setName] = useState(null)
   const [yearString, setYear] = useState('')
@@ -31,14 +31,12 @@ const Authors = ({show}) => {
     }
   }, [result])
 
-  if (!show || !allAuthors.data) {
+  if (!show || !authors.data) {
     return null
   }
 
-  const authors = allAuthors.data.allAuthors
-
   const setBirthYear = async (event) => {
-    event.preventDefault()
+    //event.preventDefault()
 
     if(!name || !yearString){
       return null
@@ -50,9 +48,9 @@ const Authors = ({show}) => {
     setYear('')
   }
 
-  const options = authors.map(a => a && {value: a.name, label: a.name})
+  const options = authors.data.allAuthors.map(a => a && {value: a.name, label: a.name})
 
-  if (allAuthors.loading) {
+  if (authors.loading) {
     return <div>Loading ... </div>
   }
 
@@ -70,7 +68,7 @@ const Authors = ({show}) => {
               Books
             </th>
           </tr>
-          {authors.map(a =>
+          {authors.data.allAuthors.map(a =>
             <tr key={a.name}>
               <td>{a.name}</td>
               <td>{a.born}</td>
@@ -80,26 +78,30 @@ const Authors = ({show}) => {
         </tbody>
       </table>
 
+      {token &&
+      <>
       <h2>Set birthyear</h2>
-      
         <div>
-        Name
-        <Select 
-          defaultValue={name}
-          onChange={setName}
-          options={options}
-        />
+          <form onSubmit={setBirthYear}>
+          <div> Name
+            <Select 
+              defaultValue={name}
+              onChange={setName}
+              options={options}
+            />
+          </div>
+          <div> Born
+            <input
+              type='number'
+              value={yearString}
+              onChange={({target}) => setYear(target.value)}
+            />
+          </div>
+          <button type='submit'>Update author</button>
+          </form>
         </div>
-
-      <form onSubmit={setBirthYear}>
-        Born
-        <input
-          type='number'
-          value={yearString}
-          onChange={({target}) => setYear(target.value)}
-        />
-        <button type='submit'>Update author</button>
-      </form>
+        </>
+}
 
     </div>
   )

@@ -6,12 +6,27 @@ const NewBook = ({ show }) => {
   
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
-  const [publishedString, setPublished] = useState('')
+  const [published, setPublished] = useState('')
   const [genre, setGenre] = useState('')
   const [genres, setGenres] = useState([])
 
-  const [ createBook ] = useMutation(ADD_BOOK, {
-    refetchQueries: [ { query: ALL_BOOKS }, { query: ALL_AUTHORS} ]
+  const [ addBook ] = useMutation(ADD_BOOK, {
+    refetchQueries: [ { query: ALL_BOOKS }, { query: ALL_AUTHORS} ],
+    onError: (error) => {
+      console.log(error)
+    }/*,
+    update: (cache, response) => {
+      cache.updateQuery({ query: ALL_BOOKS}, ({ allBooks }) => {
+        return {
+          allBooks: allBooks.concat(response.data.addBook)
+        }
+      })
+      cache.updateQuery({ query: ALL_AUTHORS}, ({ allAuthors }) => {
+        return {
+          allAuthors: allAuthors.concat(response.data.addBook)
+        }
+      })*/
+    
   })
 
   if (!show) {
@@ -19,13 +34,9 @@ const NewBook = ({ show }) => {
   }
 
   const submit = async (event) => {
-    event.preventDefault()
+    //event.preventDefault()
+    addBook( { variables: {title, author, published: parseInt(published), genres} })
     
-    console.log('add book...')
-    const published = Number(publishedString)
-    console.log(title, author, published, genres)
-    createBook( { variables: {title, author, published, genres} })
-
     setTitle('')
     setPublished('')
     setAuthor('')
@@ -59,7 +70,7 @@ const NewBook = ({ show }) => {
           published
           <input
             type='number'
-            value={publishedString}
+            value={published}
             onChange={({ target }) => setPublished(target.value)}
           />
         </div>

@@ -10,7 +10,7 @@ const MONGODB_URI = process.env.MONGODB_URI
 const JWT_SECRET = process.env.JWT_SECRET
 
 console.log('connecting to ', MONGODB_URI)
-mongoose.connect(MONGODB_URI)
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(console.log('connected to MongoDB'))
   .catch((error) => console.log('error connecting to MongoDB ', error.message))
 
@@ -20,7 +20,7 @@ const typeDefs = gql`
         name: String!
         id: ID!
         born: Int
-        bookCount: Int
+        bookCount: Int!
     }
 
     type Book {
@@ -28,7 +28,7 @@ const typeDefs = gql`
         published: Int!
         author: Author!
         id: ID!
-        genres: [String]
+        genres: [String!]!
     }
 
     type User {
@@ -43,7 +43,7 @@ const typeDefs = gql`
 
     type Query {
         allAuthors: [Author!]! 
-        allBooks(author: String, genre: String): [Book]!
+        allBooks(author: String, genre: String): [Book!]!
         bookCount: Int!
         authorCount: Int!
         me: User
@@ -55,7 +55,7 @@ const typeDefs = gql`
           title: String!
           author: String!
           published: Int!
-          genres: [String]
+          genres: [String!]!
         ): Book
 
         editAuthor(
@@ -65,7 +65,7 @@ const typeDefs = gql`
 
         createUser(
           username: String!
-          favoriteGenre: String
+          favoriteGenre: String!
         ): User
 
         login(
@@ -150,7 +150,6 @@ const resolvers = {
       }
 
       let author = await Author.findOne({ name: args.author })
-      console.log(author)
 
       if(!author) {
         console.log('Author not in DB') 
@@ -175,7 +174,6 @@ const resolvers = {
           invalidArgs: args,
         })
       }
-
       return book
     },
 
@@ -209,7 +207,7 @@ const server = new ApolloServer({
     const auth = req ? req.headers.authorization : null
     if (auth && auth.toLowerCase().startsWith('bearer ')) {
       const decodedToken = jwt.verify(
-        auth.substring(7), JWT_SECRET
+        auth.substring(7).toString(), JWT_SECRET
       )
       const currentUser = await User.findById(decodedToken.id)
       return { currentUser }

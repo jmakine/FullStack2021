@@ -6,16 +6,20 @@ const LoginForm = ({ show, setToken, setPage }) => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
-    const [login, result] = useMutation(LOGIN)
+    const [login, result] = useMutation(LOGIN, {
+        onError: (error) => {
+            console.log(error)
+        }
+    })
     
     useEffect(() => {
         if (result.data) {
            const token = result.data.login.value
            setToken(token)
-           localStorage.setItem('jwtToken', token)
+           localStorage.setItem('jwtToken', token)   
            setPage('authors') 
         }
-    }, [result.data])
+    }, [result.data]) //eslint-disable-line
 
     if(!show) {
         return null
@@ -23,7 +27,7 @@ const LoginForm = ({ show, setToken, setPage }) => {
 
     const submit = async (event) => {
         event.preventDefault()
-        login({ variables: { username, password }})
+        login({ variables: { username, password } })
         setUsername('')
         setPassword('')
     }
