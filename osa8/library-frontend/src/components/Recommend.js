@@ -9,7 +9,7 @@ const Recommend = ({ show, books }) => {
     const [ getBooks, result ] = useLazyQuery(ALL_BOOKS)
 
     useEffect(() => {
-        if(meResponse.data) {
+        if(meResponse.data && meResponse.data.me) {
             setMe(meResponse.data.me)
             getBooks({ variables: { genre: meResponse.data.me.favoriteGenre } })
         }

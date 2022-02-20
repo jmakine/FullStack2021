@@ -21,12 +21,12 @@ const Books = ({show, books}) => {
   const allGenres = books.data.allBooks.map(book => book.genres).flat(1)
   const uniqueGenres = [...new Set(allGenres)]
 
-  console.log(allGenres)
-  console.log(uniqueGenres)
+  //console.log(allGenres)
+  //console.log(uniqueGenres)
 
   return (
     <div>
-      <h2>books</h2>
+      <h2>Books</h2>
       <p>in genre <strong>{selectedGenre}</strong> </p>
       <table>
         <tbody>

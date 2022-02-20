@@ -1,60 +1,68 @@
 import { gql } from '@apollo/client'
 
+const BookDetails = gql`
+  fragment BookDetails on Book {
+    id
+    title
+    author{
+      id
+      name
+      bookCount
+      born
+    }
+    published
+    genres
+  }
+`
+
+const AuthorDetails = gql`
+  fragment AuthorDetails on Author {
+    id
+    name
+    born
+    bookCount
+  }
+`
+
 export const ALL_AUTHORS = gql`
     query {
         allAuthors {
-            name
-            born
-            bookCount
+            ...AuthorDetails
         }
     }
+    ${AuthorDetails}
 `
 
 export const ALL_BOOKS = gql`
     query allBooks($author: String, $genre: String) {
         allBooks(author: $author, genre: $genre) {
-            title
-            published
-            author{
-                name
-                bookCount
-                born
-            }
-            genres
-            id
+            ...BookDetails
         }
     }
-
+    ${BookDetails}
 `
 
 export const ADD_BOOK = gql`
-    mutation addBook($title: String!, $author: String!, $published: Int!, $genres: [String!]!) {
+    mutation addBook($title: String!, $author: String!, $published: Int!, $genres: [String]) {
             addBook(
                 title: $title, 
                 author: $author, 
                 published: $published, 
                 genres: $genres
             ) {
-                title
-                author{
-                    name
-                    born
-                    bookCount
-                }
-                published
-                genres
+                ...BookDetails
             }
         }
+        ${BookDetails}
 `
 
 export const SET_BIRTHYEAR = gql`
     mutation editAuthor($name: String!, $setBornTo: Int!) {
         editAuthor(name: $name, setBornTo: $setBornTo) {
-            name
-            born
-            bookCount
+            ...AuthorDetails
         }
     }
+    ${AuthorDetails}
 ` 
 
 export const LOGIN = gql`
@@ -73,4 +81,13 @@ export const ME = gql`
             favoriteGenre
         }
     }
+`
+
+export const BOOK_ADDED = gql`
+    subscription {
+        bookAdded {
+            ...BookDetails
+        }
+    }
+    ${BookDetails}
 `

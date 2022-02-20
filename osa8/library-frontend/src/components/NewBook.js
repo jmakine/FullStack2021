@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { ADD_BOOK, ALL_AUTHORS, ALL_BOOKS } from '../queries'
 import { useMutation } from '@apollo/client'
 
-const NewBook = ({ show }) => {
+const NewBook = ({ show, updateCacheWith }) => {
   
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
@@ -14,19 +14,10 @@ const NewBook = ({ show }) => {
     refetchQueries: [ { query: ALL_BOOKS }, { query: ALL_AUTHORS} ],
     onError: (error) => {
       console.log(error)
-    }/*,
-    update: (cache, response) => {
-      cache.updateQuery({ query: ALL_BOOKS}, ({ allBooks }) => {
-        return {
-          allBooks: allBooks.concat(response.data.addBook)
-        }
-      })
-      cache.updateQuery({ query: ALL_AUTHORS}, ({ allAuthors }) => {
-        return {
-          allAuthors: allAuthors.concat(response.data.addBook)
-        }
-      })*/
-    
+    },
+    update: (store, response) => {
+      updateCacheWith(response.data.addBook)
+    }
   })
 
   if (!show) {
@@ -34,7 +25,7 @@ const NewBook = ({ show }) => {
   }
 
   const submit = async (event) => {
-    //event.preventDefault()
+    event.preventDefault()
     addBook( { variables: {title, author, published: parseInt(published), genres} })
     
     setTitle('')
@@ -51,6 +42,7 @@ const NewBook = ({ show }) => {
 
   return (
     <div>
+      <h2>Add book</h2>
       <form onSubmit={submit}>
         <div>
           title
